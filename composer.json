@@ -13,6 +13,7 @@
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
+        "symfony/mercure-bundle": "^0.3.7",
         "symfony/runtime": "6.3.*",
         "symfony/yaml": "6.3.*"
     },
