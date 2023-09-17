@@ -1,0 +1,8 @@
+{% extends "base.html.twig" %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    <script>
+        window.MERCURE_URL = "{{ mercure('https://example.com/number')|escape('js') }}";
+    </script>
+{% endblock %}
