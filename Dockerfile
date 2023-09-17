@@ -5,7 +5,7 @@ FROM php:8.2-fpm-alpine AS php_upstream
 FROM mlocati/php-extension-installer:2 AS php_extension_installer_upstream
 FROM composer/composer:2-bin AS composer_upstream
 FROM caddy:2-alpine AS caddy_upstream
-
+FROM redis:7 AS redis_upstream
 
 # The different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
@@ -25,6 +25,7 @@ RUN apk add --no-cache \
 		file \
 		gettext \
 		git \
+		pcre-dev $PHPIZE_DEPS \
 	;
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
@@ -37,6 +38,8 @@ RUN set -eux; \
 		opcache \
 		zip \
     ;
+
+RUN pecl install redis && docker-php-ext-enable redis
 
 ###> recipes ###
 ###< recipes ###
@@ -117,3 +120,7 @@ HEALTHCHECK CMD wget --no-verbose --tries=1 --spider https://localhost/healthz |
 FROM caddy_base AS caddy_prod
 
 COPY --from=php_prod --link /srv/app/public public/
+
+FROM redis_upstream AS redis_base
+FROM redis_base AS redis_dev
+FROM redis_base AS redis_prod

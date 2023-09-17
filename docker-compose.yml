@@ -48,6 +48,12 @@ services:
         published: ${HTTP3_PORT:-443}
         protocol: udp
 
+  redis:
+    image: ${IMAGES_PREFIX:-}app-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
@@ -56,5 +62,6 @@ volumes:
   php_socket:
   caddy_data:
   caddy_config:
+  redis_data:
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
